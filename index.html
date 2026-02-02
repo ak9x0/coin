@@ -107,7 +107,7 @@
         if (isCoolingDown) return;
         const msg = document.getElementById('message');
         // 55%の確率で表が出るように調整
-        if (Math.random() < 0.55) {
+        if (Math.random() < 0.60) {
             combo++;
             let prize = 10 * player.level * Math.pow(2, combo - 1);
             player.money += prize;
