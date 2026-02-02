@@ -181,7 +181,7 @@
     }
 
     function winBattle() {
-        let expGain = Math.min(20, 5 + Math.floor(enemy.maxHp / 50));
+        let expGain = Math.min(15, 10 + Math.floor(enemy.maxHp / 500));
         addLog(`🎉 勝利！ ${expGain} EXP獲得！`);
         player.exp += expGain;
         
