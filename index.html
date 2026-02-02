@@ -92,15 +92,12 @@
         document.getElementById('p-maxhp').innerText = player.maxHp;
         document.getElementById('p-atk').innerText = player.atk;
         document.getElementById('p-def').innerText = player.def;
-        
         document.getElementById('m-hp').innerText = Math.max(0, enemy.hp);
         document.getElementById('m-maxhp').innerText = enemy.maxHp;
         document.getElementById('m-hp-fill').style.width = (enemy.hp / enemy.maxHp * 100) + "%";
-        
         document.getElementById('c-hp').innerText = shopCosts.hp;
         document.getElementById('c-atk').innerText = shopCosts.atk;
         document.getElementById('c-def').innerText = shopCosts.def;
-        
         document.getElementById('btn-buy-hp').disabled = player.money < shopCosts.hp;
         document.getElementById('btn-buy-atk').disabled = player.money < shopCosts.atk;
         document.getElementById('btn-buy-def').disabled = player.money < shopCosts.def;
@@ -109,7 +106,8 @@
     function tossCoin() {
         if (isCoolingDown) return;
         const msg = document.getElementById('message');
-        if (Math.random() < 0.5) {
+        // 55%の確率で表が出るように調整
+        if (Math.random() < 0.55) {
             combo++;
             let prize = 10 * player.level * Math.pow(2, combo - 1);
             player.money += prize;
@@ -140,7 +138,7 @@
     function buyStat(type) {
         if (player.money >= shopCosts[type]) {
             player.money -= shopCosts[type];
-            if (type === 'hp') { player.maxHp += 20; }
+            if (type === 'hp') player.maxHp += 20;
             if (type === 'atk') player.atk += 5;
             if (type === 'def') player.def += 3;
             shopCosts[type] = Math.floor(shopCosts[type] * 1.6);
@@ -171,6 +169,7 @@
 
             if (enemy.hp <= 0) { clearInterval(battleInterval); winBattle(); return; }
 
+            // 敵の攻撃計算 (最低ダメージ1を保証)
             let eDamage = Math.max(1, enemy.atk - player.def);
             player.hp -= eDamage;
             addLog(`💢 被弾：${eDamage}！ (残:${Math.max(0, player.hp)})`);
@@ -181,7 +180,7 @@
     }
 
     function winBattle() {
-        let expGain = Math.min(15, 10 + Math.floor(enemy.maxHp / 500));
+        let expGain = 10; // 獲得経験値を10固定に
         addLog(`🎉 勝利！ ${expGain} EXP獲得！`);
         player.exp += expGain;
         
@@ -191,8 +190,9 @@
             addLog("🎊 レベルアップ！"); 
         }
         
-        enemy.maxHp = Math.floor(enemy.maxHp * 1.25);
-        enemy.atk += 2;
+        // 敵の強化をゆるやかに調整
+        enemy.maxHp = Math.floor(enemy.maxHp * 1.15); // 1.25から1.15へ
+        enemy.atk += 1; // 2から1へ
         endBattle();
         saveGame();
     }
