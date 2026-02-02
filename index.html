@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>コイントス・タイクーン</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f0f0f0; }
+        .stats { font-size: 24px; margin-bottom: 20px; }
+        .coin-btn { 
+            padding: 20px 40px; font-size: 20px; cursor: pointer; 
+            background-color: #ffd700; border: none; border-radius: 10px;
+            box-shadow: 0 4px #b8860b;
+        }
+        .coin-btn:active { transform: translateY(4px); box-shadow: none; }
+        #message { margin-top: 20px; font-weight: bold; color: #333; height: 1.5em; }
+    </style>
+</head>
+<body>
+
+    <h1>💰 コイントス・タイクーン</h1>
+    
+    <div class="stats">
+        所持金: <span id="money">0</span> 円<br>
+        現在のコンボ: <span id="combo">0</span> 回
+    </div>
+
+    <button class="coin-btn" onclick="tossCoin()">コインを投げる！</button>
+
+    <div id="message"></div>
+
+    <script>
+        // ゲームの状態を管理する変数
+        let money = 0;
+        let combo = 0;
+        let userLevel = 1; // 後でレベルアップ機能に使う
+
+        function tossCoin() {
+            const messageEl = document.getElementById('message');
+            const moneyEl = document.getElementById('money');
+            const comboEl = document.getElementById('combo');
+
+            // 1. 50%の確率で表(true)か裏(false)を決める
+            const isHeads = Math.random() < 0.5;
+
+            if (isHeads) {
+                // 表が出た時
+                combo++;
+                // 基礎単価10円 × 2の(コンボ-1)乗
+                let prize = 10 * userLevel * Math.pow(2, combo - 1);
+                money += prize;
+
+                messageEl.innerText = `✨ 表！ ${prize}円 獲得！`;
+                messageEl.style.color = "orange";
+            } else {
+                // 裏が出た時
+                combo = 0;
+                messageEl.innerText = "💀 裏... コンボ終了";
+                messageEl.style.color = "blue";
+            }
+
+            // 画面の数字を更新
+            moneyEl.innerText = money.toLocaleString();
+            comboEl.innerText = combo;
+        }
+    </script>
+</body>
+</html>
